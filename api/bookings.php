@@ -1,4 +1,4 @@
-<?php
+THIS SHOULD BE A LINTER ERROR<?php
 /**
  * Bookings API Endpoint
  * Logistic CRM System
