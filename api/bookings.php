@@ -63,22 +63,7 @@ try {
         default:
             http_response_code(405);
             echo json_encode([
-                'error' => 'Booking deletion failed',
-                'code' => 'BOOKING_DELETION_FAILED',
-                'errors' => $result['errors']
-            ]);
-        }
-        
-    } catch (Exception $e) {
-        error_log("Delete booking error: " . $e->getMessage());
-        http_response_code(500);
-        echo json_encode([
-            'error' => 'Failed to delete booking',
-            'code' => 'DELETE_BOOKING_FAILED',
-            'message' => $e->getMessage()
-        ]);
-    }
-}' => 'Method not allowed',
+                'error' => 'Method not allowed',
                 'code' => 'METHOD_NOT_ALLOWED'
             ]);
             break;
@@ -654,4 +639,19 @@ function handleDeleteBooking($bookingManager, $current_user) {
         } else {
             http_response_code(400);
             echo json_encode([
-                'error
+                'error' => 'Booking deletion failed',
+                'code' => 'BOOKING_DELETION_FAILED',
+                'errors' => $result['errors']
+            ]);
+        }
+        
+    } catch (Exception $e) {
+        error_log("Delete booking error: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode([
+            'error' => 'Failed to delete booking',
+            'code' => 'DELETE_BOOKING_FAILED',
+            'message' => $e->getMessage()
+        ]);
+    }
+}
