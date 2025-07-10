@@ -6,8 +6,8 @@
  * Validates company licenses and enforces usage limits
  */
 
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../classes/LicenseManager.php';
+require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/LicenseManager.php';
 
 /**
  * Check license validity for a company
