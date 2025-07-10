@@ -1,4 +1,4 @@
-THIS SHOULD BE A LINTER ERROR<?php
+<?php
 /**
  * Bookings API Endpoint
  * Logistic CRM System
@@ -25,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 try {
     // Include required files
-    require_once __DIR__ . '/config/database.php';
-    require_once __DIR__ . '/BookingManager.php';
-    require_once __DIR__ . '/auth.php';
-    require_once __DIR__ . '/license_check.php';
+    require_once __DIR__ . '/../config/database.php';
+    require_once __DIR__ . '/../classes/BookingManager.php';
+    require_once __DIR__ . '/../middleware/auth.php';
+    require_once __DIR__ . '/../middleware/license_check.php';
     
     // Authenticate user
     $current_user = authenticate();
