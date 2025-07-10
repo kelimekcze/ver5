@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistic CRM - Správa časových slotů</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/calendar.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Načítání...</p>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <img src="assets/images/logo.png" alt="Logistic CRM" class="logo">
+                <h1>Logistic CRM</h1>
+                <p>Správa časových slotů pro logistiku</p>
+            </div>
+            
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Heslo</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="fas fa-sign-in-alt"></i> Přihlásit se
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <a href="#" onclick="showPasswordReset()">Zapomenuté heslo?</a>
+                <a href="#" onclick="showRegistration()">Registrovat firmu</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="main-app" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo-container">
+                    <img src="assets/images/logo.png" alt="Logistic CRM" class="logo-small">
+                    <h1>Logistic CRM</h1>
+                </div>
+            </div>
+            
+            <div class="header-center">
+                <div class="search-container">
+                    <input type="text" id="global-search" placeholder="Hledat...">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="license-status" id="license-status">
+                    <i class="fas fa-certificate"></i>
+                    <span id="license-text">Načítání licence...</span>
+                </div>
+                
+                <div class="notifications" id="notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">0</span>
+                    </button>
+                </div>
+                
+                <div class="user-menu" id="user-menu">
+                    <button class="user-btn">
+                        <img src="assets/images/default-avatar.png" alt="User" class="user-avatar">
+                        <span class="user-name">Uživatel</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="#" onclick="showProfile()"><i class="fas fa-user"></i> Profil</a>
+                        <a href="#" onclick="showSettings()"><i class="fas fa-cog"></i> Nastavení</a>
+                        <hr>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Odhlásit se</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="#" class="menu-item" data-page="calendar">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Kalendář slotů</span>
+                </a>
+                
+                <a href="#" class="menu-item" data-page="bookings">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Rezervace</span>
+                    <span class="badge" id="pending-bookings">0</span>
+                </a>
+                
+                <a href="#" class="menu-item" data-page="warehouses">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Sklady</span>
+                </a>
+                
+                <a href="#" class="menu-item" data-page="vehicles">
+                    <i class="fas fa-truck"></i>
+                    <span>Vozidla</span>
+                </a>
+                
+                <a href="#" class="menu-item" data-page="drivers">
+                    <i class="fas fa-users"></i>
+                    <span>Řidiči</span>
+                </a>
+                
+                <a href="#" class="menu-item" data-page="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reporty</span>
+                </a>
+                
+                <div class="menu-section">
+                    <h3>Správa</h3>
+                    <a href="#" class="menu-item" data-page="users">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Uživatelé</span>
+                    </a>
+                    
+                    <a href="#" class="menu-item" data-page="companies">
+                        <i class="fas fa-building"></i>
+                        <span>Firmy</span>
+                    </a>
+                    
+                    <a href="#" class="menu-item" data-page="licenses">
+                        <i class="fas fa-certificate"></i>
+                        <span>Licence</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <div class="page-header">
+                    <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showNewBookingModal()">
+                            <i class="fas fa-plus"></i> Nová rezervace
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="pending-slots">0</h3>
+                            <p>Čekající sloty</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="completed-today">0</h3>
+                            <p>Dokončeno dnes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="active-drivers">0</h3>
+                            <p>Aktivní řidiči</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="warehouse-count">0</h3>
+                            <p>Sklady</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Dnešní sloty</h3>
+                            <button class="btn btn-sm btn-outline" onclick="refreshTodaySlots()">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div id="today-slots" class="slots-timeline">
+                                <div class="loading-placeholder">Načítání...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Nejbližší rezervace</h3>
+                            <a href="#" class="btn btn-sm btn-outline" onclick="showPage('bookings')">
+                                Zobrazit vše
+                            </a>
+                        </div>
+                        <div class="card-content">
+                            <div id="upcoming-bookings" class="bookings-list">
+                                <div class="loading-placeholder">Načítání...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Vytížení skladů</h3>
+                        </div>
+                        <div class="card-content">
+                            <div id="warehouse-utilization" class="utilization-chart">
+                                <div class="loading-placeholder">Načítání...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Rychlé akce</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="quick-actions">
+                                <button class="quick-action-btn" onclick="showNewSlotModal()">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span>Nový slot</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showNewBookingModal()">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <span>Nová rezervace</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showPage('calendar')">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>Kalendář</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showPage('reports')">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Reporty</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Page -->
+            <div id="calendar-page" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-calendar-alt"></i> Kalendář slotů</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-outline" onclick="showNewSlotModal()">
+                            <i class="fas fa-plus"></i> Nový slot
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="calendar-controls">
+                    <div class="calendar-nav">
+                        <button class="btn btn-outline" onclick="navigateCalendar('prev')">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-outline" onclick="navigateCalendar('today')">
+                            Dnes
+                        </button>
+                        <button class="btn btn-outline" onclick="navigateCalendar('next')">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="calendar-title">
+                        <h2 id="calendar-title">Leden 2025</h2>
+                    </div>
+                    
+                    <div class="calendar-view-toggle">
+                        <button class="btn btn-sm" data-view="day">Den</button>
+                        <button class="btn btn-sm active" data-view="week">Týden</button>
+                        <button class="btn btn-sm" data-view="month">Měsíc</button>
+                    </div>
+                </div>
+                
+                <div class="calendar-container">
+                    <div id="calendar-grid" class="calendar-grid">
+                        <div class="loading-placeholder">Načítání kalendáře...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bookings Page -->
+            <div id="bookings-page" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-clipboard-list"></i> Rezervace</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-outline" onclick="exportBookings()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <button class="btn btn-primary" onclick="showNewBookingModal()">
+                            <i class="fas fa-plus"></i> Nová rezervace
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select id="status-filter">
+                            <option value="">Všechny</option>
+                            <option value="pending">Čekající</option>
+                            <option value="confirmed">Potvrzené</option>
+                            <option value="in_progress">Probíhající</option>
+                            <option value="completed">Dokončené</option>
+                            <option value="cancelled">Zrušené</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Sklad:</label>
+                        <select id="warehouse-filter">
+                            <option value="">Všechny sklady</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Datum od:</label>
+                        <input type="date" id="date-from-filter">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Datum do:</label>
+                        <input type="date" id="date-to-filter">
+                    </div>
+                    
+                    <button class="btn btn-outline" onclick="applyFilters()">
+                        <i class="fas fa-filter"></i> Filtrovat
+                    </button>
+                    
+                    <button class="btn btn-outline" onclick="clearFilters()">
+                        <i class="fas fa-times"></i> Vymazat
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Datum & Čas</th>
+                                <th>Sklad</th>
+                                <th>Řidič</th>
+                                <th>Vozidlo</th>
+                                <th>Status</th>
+                                <th>Typ</th>
+                                <th>Akce</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-table-body">
+                            <tr>
+                                <td colspan="8" class="loading-placeholder">Načítání rezervací...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination" id="bookings-pagination">
+                    <!-- Pagination will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Other pages will be loaded dynamically -->
+            <div id="warehouses-page" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-warehouse"></i> Sklady</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showNewWarehouseModal()">
+                            <i class="fas fa-plus"></i> Nový sklad
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid-container">
+                    <div id="warehouses-grid" class="warehouses-grid">
+                        <div class="loading-placeholder">Načítání skladů...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal" id="modal-container">
+            <!-- Modal content will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/calendar.js"></script>
+    <script src="assets/js/bookings.js"></script>
+    <script src="assets/js/modals.js"></script>
+</body>
+</html>
